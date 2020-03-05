@@ -597,16 +597,20 @@ public final class InstantiatingGrpcChannelProvider implements TransportChannelP
     // subchannels.
     // See the service config proto definition for more details:
     // https://github.com/grpc/grpc-proto/blob/master/grpc/service_config/service_config.proto
-    ImmutableMap<String, Object> pickFirstStrategy =
-        ImmutableMap.<String, Object>of("pick_first", ImmutableMap.of());
 
-    ImmutableMap<String, Object> childPolicy =
-        ImmutableMap.<String, Object>of("childPolicy", ImmutableList.of(pickFirstStrategy));
-
-    ImmutableMap<String, Object> grpcLbPolicy =
-        ImmutableMap.<String, Object>of("grpclb", childPolicy);
-
-    return ImmutableMap.<String, Object>of("loadBalancingConfig", ImmutableList.of(grpcLbPolicy));
+    //TODO(creamsoup) pass rls config hardcoded for test
+    //
+    // ImmutableMap<String, Object> pickFirstStrategy =
+    //     ImmutableMap.<String, Object>of("pick_first", ImmutableMap.of());
+    //
+    // ImmutableMap<String, Object> childPolicy =
+    //     ImmutableMap.<String, Object>of("childPolicy", ImmutableList.of(pickFirstStrategy));
+    //
+    // ImmutableMap<String, Object> grpcLbPolicy =
+    //     ImmutableMap.<String, Object>of("grpclb", childPolicy);
+    //
+    // return ImmutableMap.<String, Object>of("loadBalancingConfig", ImmutableList.of(grpcLbPolicy));
+    return ImmutableMap.copyOf(RlsProvider.getRlsServiceConfig());
   }
 
   private static void validateEndpoint(String endpoint) {
