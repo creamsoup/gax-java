@@ -244,13 +244,19 @@ public final class InstantiatingGrpcChannelProvider implements TransportChannelP
     // TODO(weiranf): Add a new API in ComputeEngineCredentials to check whether it's using default
     // service account.
     if (isDirectPathEnabled(serviceAddress) && credentials instanceof ComputeEngineCredentials) {
+      System.out.println("Directpath is enabled, using " + directPathServiceConfig);
       builder = ComputeEngineChannelBuilder.forAddress(serviceAddress, port);
       // Set default keepAliveTime and keepAliveTimeout when directpath environment is enabled.
       // Will be overridden by user defined values if any.
       builder.keepAliveTime(DIRECT_PATH_KEEP_ALIVE_TIME_SECONDS, TimeUnit.SECONDS);
       builder.keepAliveTimeout(DIRECT_PATH_KEEP_ALIVE_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+
       builder.defaultServiceConfig(directPathServiceConfig);
     } else {
+      System.out.println(
+          "Directopath is not enabled. is Addr direct path enabled? "
+              + isDirectPathEnabled(serviceAddress)
+              + ", credential type: " + credentials.getClass().getName());
       builder = ManagedChannelBuilder.forAddress(serviceAddress, port);
     }
     builder
