@@ -4,7 +4,6 @@ import static com.google.common.base.Preconditions.checkState;
 
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
-import io.grpc.internal.JsonParser;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -19,6 +18,7 @@ public class RlsProvider {
 
   @SuppressWarnings("unchecked")
   public static Map<String, Object> getRlsServiceConfig() {
+    System.out.println("GENERATING RLS SERVICE CONFIG");
     String rlsConfigJson = getRlsConfigJsonStr();
     String grpclbJson = "{\"grpclb\": {\"childPolicy\": [{\"pick_first\": {}}]}}";
     String serviceConfig = "{"
@@ -46,52 +46,26 @@ public class RlsProvider {
         + "    {\n"
         + "      \"names\": [\n"
         + "        {\n"
-        + "          \"service\": \"grpc.lookup.v1.BackendService\",\n"
-        + "          \"method\": \"Echo\"\n"
+        + "          \"service\": \"google.bigtable.v2.Bigtable\"\n"
         + "        }\n"
         + "      ],\n"
         + "      \"headers\": [\n"
         + "        {\n"
-        + "          \"key\": \"user\","
-        + "          \"names\": [\"User\", \"Parent\"],\n"
-        + "          \"optional\": true\n"
-        + "        },\n"
-        + "        {\n"
-        + "          \"key\": \"id\","
-        + "          \"names\": [\"X-Google-Id\"],\n"
-        + "          \"optional\": true\n"
-        + "        }\n"
-        + "      ]\n"
-        + "    },\n"
-        + "    {\n"
-        + "      \"names\": [\n"
-        + "        {\n"
-        + "          \"service\": \"grpc.lookup.v1.BackendService\",\n"
-        + "          \"method\": \"*\"\n"
-        + "        }\n"
-        + "      ],\n"
-        + "      \"headers\": [\n"
-        + "        {\n"
-        + "          \"key\": \"user\","
-        + "          \"names\": [\"User\", \"Parent\"],\n"
-        + "          \"optional\": true\n"
-        + "        },\n"
-        + "        {\n"
-        + "          \"key\": \"password\","
-        + "          \"names\": [\"Password\"],\n"
-        + "          \"optional\": true\n"
+        + "          \"key\": \"x-goog-request-params\","
+        + "          \"names\": [\"x-goog-request-params\"]\n"
         + "        }\n"
         + "      ]\n"
         + "    }\n"
         + "  ],\n"
-        + "  \"lookupService\": \"localhost:8972\",\n"
-        + "  \"lookupServiceTimeout\": 2,\n"
-        + "  \"maxAge\": 300,\n"
-        + "  \"staleAge\": 240,\n"
-        + "  \"validTargets\": [\"localhost:9001\", \"localhost:9002\"],"
-        + "  \"cacheSizeBytes\": 1000,\n"
-        + "  \"defaultTarget\": \"defaultTarget\",\n"
-        + "  \"requestProcessingStrategy\": \"ASYNC_LOOKUP_DEFAULT_TARGET_ON_MISS\"\n"
+        + "  \"lookupService\": \"cloud-bigtable-rls-test.main.gslb.googleprod.com\",\n"
+        + "  \"lookupServiceTimeout\": 5,\n"
+        + "  \"maxAge\": 120,\n"
+        + "  \"validTargets\": ["
+        + "    \"cloud-bigtable-api-test\", " // check if this is gslb
+        + "    \"cloud-bigtable-api-test-us-central1\""
+        + "  ],"
+        + "  \"defaultTarget\": \"cloud-bigtable-api-test\",\n"
+        + "  \"requestProcessingStrategy\": \"SYNC_LOOKUP_DEFAULT_TARGET_ON_ERROR\"\n"
         + "}";
   }
 

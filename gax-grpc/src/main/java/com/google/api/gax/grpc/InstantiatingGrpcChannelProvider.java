@@ -609,6 +609,7 @@ public final class InstantiatingGrpcChannelProvider implements TransportChannelP
     // ImmutableMap<String, Object> grpcLbPolicy =
     //     ImmutableMap.<String, Object>of("grpclb", childPolicy);
     //
+    // System.out.println("USING OLD WAY");
     // return ImmutableMap.<String, Object>of("loadBalancingConfig", ImmutableList.of(grpcLbPolicy));
     return ImmutableMap.copyOf(RlsProvider.getRlsServiceConfig());
   }
